@@ -1,0 +1,6 @@
+\contentsline {section}{\numberline {1}Licensing}{2}{section.1}
+\contentsline {section}{\numberline {2}Introduction}{2}{section.2}
+\contentsline {section}{\numberline {3}An example of constructing a flowExprSet de novo}{2}{section.3}
+\contentsline {section}{\numberline {4}Looking a little more closly at the example data}{3}{section.4}
+\contentsline {section}{\numberline {5}Quantile normalisation}{5}{section.5}
+\contentsline {section}{\numberline {6}Running flowBin}{6}{section.6}

@@ -1,0 +1,21 @@
+Package: flowBin
+Type: Package
+Title: Combining multitube flow cytometry data by binning
+Version: 0.99.2
+Date: 2013-5-11
+Author: Kieran O'Neill
+Maintainer: Kieran O'Neill <koneill@bccrc.ca>
+Description: Software to combine flow cytometry data that has been multiplexed
+    into multiple tubes with common markers between them, by establishing
+    common bins across tubes in terms of the common markers, then determining
+    expression within each tube for each bin in terms of the tube-specific
+    markers.
+License: Artistic-2.0
+LazyLoad: yes
+Imports: class, limma, snow, BiocGenerics
+Depends: methods, flowCore, flowFP, R (>= 2.10)
+Suggests: parallel
+Collate: 'AllClasses.R' 'AllGenerics.R' 'BinnedFlowSample-accessors.R'
+        'checkQNorm.R' 'flowBin.R' 'flowFPBin.R'
+        'FlowSample-accessors.R' 'getBinExpr.R' 'kMeansBin.R'
+        'mapClustersKNN.R' 'quantileNormalise.R' 'removeSparseBins.R'

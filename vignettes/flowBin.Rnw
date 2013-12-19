@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage{cite, hyperref}
+
+\title{flowBin: a Package for Combining Multitube Flow Cytometry Data }
+\author{Kieran O'Neill'}
+
+%\VignetteIndexEntry{flowBin}
+
+\begin{document}
+\setkeys{Gin}{width=0.65\textwidth}
+\setkeys{Gin}{height=0.65\textwidth}
+
+\maketitle
+\begin{center}
+{\tt koneill@bccrc.ca}
+\end{center}
+
+\textnormal{\normalfont}
+
+\tableofcontents
+\newpage
+
+
+
+\section{Licensing}
+Under the Artistic License, you are free to use and redistribute this software.
+
+\section{Introduction}
+flowBin is a package for combining multitube flow cytometry data together using common population markers included in each tube.
+
+\section{An example of constructing a flowExprSet de novo}
+Although for the main example we will use a pre-constructed flowSample, it is useful to understand how one may be constructed de novo (using the example data from flowFP):
+
+<<stagea>>=
+library(flowBin)
+library(flowFP)
+data(fs1)
+show(fs1)
+@
+
+Let's take a look at the parameters stored in this flowSet:
+
+<<stageb>>==
+fsApply(fs1, function(x){x@parameters@data[,'desc']})
+@
+
+P1, P2 and P5 are our common parameters, while 3,4,6,7 are the tube-specific measurement parameters. Also, tube 1 appears to contain isotype controls (IgG1). So, to make a flowSample:
+
+<<stagex>>==
+aml.sample <- new('FlowSample',
+				  			name='Example flowSample', 
+                            tube.set=as.list(fs1@frames), 
+                            control.tubes=c(1), 
+                            bin.pars=c(1,2,5), 
+                            measure.pars=list(c(3,4,6,7)))
+show(aml.sample)
+
+@
+
+\section{Looking a little more closly at the example data}
+For our example, we will use a leukemia diagnostic panel for one patient, downsampled for inclusion in the package.
+This example data set was taken from FlowRepository data set \href{http://flowrepository.org/id/FR-FCM-ZZYA}{\texttt{FR-FCM-ZZYA}}, which contains full data for 359 patients, and is a good data set to try out flowBin on. (It is also most likely the same data set which the flowFP example was taken from).
+
+Let's plot two of the population (binning) markers in tube 1:
+
+<<examineTubes, fig=TRUE>>==
+data(amlsample)
+tube1.frame <- tube.set(aml.sample)[[1]]
+show(tube1.frame)
+plot(exprs(tube1.frame)[,c(5,2)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+@
+
+Let's look at two of the measurment markers in tube 1, which is a negative control tube:
+
+<<examineTubes2, fig=TRUE>>==
+plot(exprs(tube1.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+@
+
+We can see that they are well in the lower end of the expression range.
+By contrast, here are the same channels in a measurement tube, with specific antibodies conjugated to them:
+
+<<examineTubes, fig=TRUE>>==
+tube7.frame <- tube.set(aml.sample)[[7]]
+show(tube7.frame)
+plot(exprs(tube7.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+@
+
+Notice how most of the cells are still in the negative region, but there is a clear (but small) positive population.
+
+\section{Quantile normalisation}
+While the negative controls can allow us to account for minor technical variation across tubes in the measurement markers, we do not have that luxury for the binning markers.
+However, since each tube is an aliquot from a common biological sample, stained with the same antibodies, we expect that they should all have the same underlying distribution.
+So, flowBin provides functionality to quantile normalise the binning markers across tubes.
+
+<<stage1, echo=TRUE>>=
+normed.sample <- quantileNormalise(aml.sample)
+@
+
+There is also a function to perform a quick check on the performance of the normalisation, using the quality control functionality of flowFP to measure the average standard deviation in probability bin densities across tubes.
+Here we plot the before and after densities (lower is better).
+
+<<stage2, echo=TRUE, fig=TRUE>>=
+qnorm.check <- checkQNorm(aml.sample, normed.sample, do.plot=F)
+plot(qnorm.check$sd.before, type='l', lwd=2, 
+	 ylim=c(0, max(qnorm.check$sd.before)), 
+	 xlab='Tubes', 
+	 ylab='Standard deviation of bin densities', 
+	 main='SD before and after normalisation')
+lines(qnorm.check$sd.after, lwd=2, col='blue')
+legend(x=5.5, y=0.35, legend=c('Before', 'After'), lwd=2, col=c('black', 'blue'))
+@
+
+Quantile normalisation definitely seems to have improved things, although tube 4 might be worth examining for QC purposes.
+For this example, we'll run with it, though.
+
+\section{Running flowBin}
+<<flowBinRun, echo=T>>=
+tube.combined <- flowBin(tube.list=aml.sample@tube.set, 
+bin.pars=aml.sample@bin.pars, 
+control.tubes=aml.sample@control.tubes, 
+expr.method='medianFIDist', 
+scale.expr=T)
+@
+
+We use scale.expr to scale the results to the interval $[0,1]$ by dividing by their range as specified in the flowFrame. 
+For our example, this puts the FSC channel on the same scale as the others, fascilitating plotting (and other downstream uses):
+
+<<flowBinPlot, echo=T, fig=TRUE>>=
+heatmap(tube.combined, scale='none')
+@
+
+We can try another method of determining bin expression, propPos, which sets cutoffs at the 98th percentile of the negative control, and counts what proportion of events fall above the cutoff.
+
+<<flowBinRun2, echo=T>>=
+tube.propPos <- flowBin(tube.list=aml.sample@tube.set, 
+bin.pars=aml.sample@bin.pars, 
+control.tubes=aml.sample@control.tubes, 
+expr.method='propPos', 
+scale.expr=T)
+@
+
+<<flowBinPlot2, echo=T, fig=TRUE>>=
+heatmap(tube.propPos, scale='none')
+@
+
+%\section{Things you can do with flowbin output}
+
+\end{document}

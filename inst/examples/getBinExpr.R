@@ -1,0 +1,6 @@
+data(amlsample)
+normed.sample <- quantileNormalise(aml.sample)
+binned.sample <- flowFPBin(normed.sample)
+binned.sample <- removeSparseBins(binned.sample, 0.001)
+bin.expr <- getBinExpr(binned.sample)
+heatmap(bin.expr, scale='none')
