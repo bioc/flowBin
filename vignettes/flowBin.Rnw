@@ -7,6 +7,7 @@
 %\VignetteIndexEntry{flowBin}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \setkeys{Gin}{width=0.65\textwidth}
 \setkeys{Gin}{height=0.65\textwidth}
 
@@ -67,13 +68,13 @@ Let's plot two of the population (binning) markers in tube 1:
 data(amlsample)
 tube1.frame <- tube.set(aml.sample)[[1]]
 show(tube1.frame)
-plot(exprs(tube1.frame)[,c(5,2)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+plot(exprs(tube1.frame)[,c(5,2)], pch=16, cex=0.6, xlim=c(0,4), ylim=c(0,4))
 @
 
 Let's look at two of the measurment markers in tube 1, which is a negative control tube:
 
 <<examineTubes2, fig=TRUE>>==
-plot(exprs(tube1.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+plot(exprs(tube1.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,4), ylim=c(0,4))
 @
 
 We can see that they are well in the lower end of the expression range.
@@ -82,7 +83,7 @@ By contrast, here are the same channels in a measurement tube, with specific ant
 <<examineTubes, fig=TRUE>>==
 tube7.frame <- tube.set(aml.sample)[[7]]
 show(tube7.frame)
-plot(exprs(tube7.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,1024), ylim=c(0,1024))
+plot(exprs(tube7.frame)[,c(3,6)], pch=16, cex=0.6, xlim=c(0,4), ylim=c(0,4))
 @
 
 Notice how most of the cells are still in the negative region, but there is a clear (but small) positive population.

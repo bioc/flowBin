@@ -45,7 +45,7 @@ setClass("FlowSample", representation( name="character",
 #' A \code{FlowSample}, but with binning information for each tube
 #' 
 #' \describe{
-#'	\item{\code{clust.labels}:}{\code{list} of cluster label vectors, one for each tube}
+#'	\item{\code{bin.labels}:}{\code{list} of bin label vectors, one for each tube}
 #'	   Note: all slots can be get and set using accessor methods, for example \code{bin.pars(myFlowSet) <- c(1,2,5)}
 #' }
 #' @export

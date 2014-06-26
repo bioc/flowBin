@@ -28,8 +28,10 @@ NULL
 #' @param bin.method The method to use for creating bins. The two options are "kmeans" for k-means 
 #' clustering and nearest-neighbour mapping of bins. or "flowFP" for flowFP binning and direct
 #' mapping of bin boundaries across tubes.
-#' @param expr.method The method to use to compute bin expression across tubes. This defaults to 
-#' MFI of the cells belonging to that bin in each tube. Other options are 
+#' @param expr.method Method to use to compute expression, passed as a string. Defaults to \code{medianFI}, which takes the simple median of each bin,
+#' and does not require control tubes. Other options available are \code{medianFIDist}, which uses medians with the 
+#' median of the negative control subtracted out, and \code{propPos} which sets a threshold at the 98th percentile of the
+#' negative control and determines what proportion of cells lie above that.
 #' @param sparse.bin.thresh Bins which contain fewer than this proportion of total events in any tube will be excluded as outliers. Defaults to 0.001
 #' @param dequantize If TRUE, adds a small (region of 1e-8) value to flow data to help break ties when binning.
 #' @param snow.cluster A cluster created using the \code{snow} package, which flowBin will use to speed up computation. If NULL, flowBin will execute in serial mode.
