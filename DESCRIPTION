@@ -1,7 +1,7 @@
 Package: flowBin
 Type: Package
 Title: Combining multitube flow cytometry data by binning
-Version: 1.18.0
+Version: 1.18.1
 Date: 2013-5-11
 Author: Kieran O'Neill
 Maintainer: Kieran O'Neill <koneill@bccrc.ca>
@@ -15,7 +15,7 @@ LazyLoad: yes
 Imports: class, limma, snow, BiocGenerics
 Depends: methods, flowCore, flowFP, R (>= 2.10)
 Suggests: parallel
-biocViews: CellBasedAssays, FlowCytometry 
+biocViews: ImmunoOncology, CellBasedAssays, FlowCytometry 
 Collate: 'AllClasses.R' 'AllGenerics.R' 'BinnedFlowSample-accessors.R'
         'checkQNorm.R' 'flowBin.R' 'flowFPBin.R'
         'FlowSample-accessors.R' 'getBinExpr.R' 'kMeansBin.R'
