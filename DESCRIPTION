@@ -1,7 +1,7 @@
 Package: flowBin
 Type: Package
 Title: Combining multitube flow cytometry data by binning
-Version: 1.31.0
+Version: 1.32.0
 Date: 2013-5-11
 Author: Kieran O'Neill
 Maintainer: Kieran O'Neill <koneill@bccrc.ca>
